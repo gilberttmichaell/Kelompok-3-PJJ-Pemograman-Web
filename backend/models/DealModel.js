@@ -1,4 +1,4 @@
-// models/DealModel.js
+// models/dealModel.js
 
 const db = require('../config/database');
 
@@ -34,5 +34,24 @@ const findById = async (id) => {
   );
   return rows[0] ?? null;
 };
+const createFormLead = async (leadId, title, stage) => {
+  const [{insertId}] = await db.query(
+    `INSERT INTO deals (lead_id, title, stage) VALUES (?,?,?)`,
+    [leadId, title, stage ?? null]
+  );
+  return insertId;
+}
 
-module.exports = { findAll, findById };
+const updateStageByLeadId = async (leadId, stage, value = null) => {
+  await db.query(
+    `UPDATE deals SET stage=?, value=? WHERE lead_id=?`,
+    [stage ??null, value, leadId]
+  );
+};
+
+const removeByLeadId = async (leadId) =>{
+  await db.query(`DELETE FROM deals WHERE lead_id =?`, [leadId]);
+};
+
+
+module.exports = { findAll, findById , createFormLead, updateStageByLeadId, removeByLeadId};

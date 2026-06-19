@@ -1,4 +1,4 @@
-// models/LeadModel.js
+// models/leadModel.js
 
 const db = require('../config/database');
 
@@ -28,4 +28,29 @@ const findById = async (id) => {
   return rows[0] ?? null;
 };
 
-module.exports = { findAll, findById };
+//menambahkan data leads
+const store = async ({customer_id, title, source, notes, status, assigned_to}) =>{
+  const [{insertId}] =await db.query(
+    `INSERT INTO leads (customer_id, title, source, notes, status, assigned_to)
+    VALUES (?,?,?,?,?,?)
+    `, 
+
+    [customer_id, title, source ?? null, notes ?? null, status ?? 'New', assigned_to ?? null]
+
+  );
+  return insertId;
+}
+
+const update = async (id, {customer_id, title, source, notes, status, assigned_to}) => {
+  const [{affectedRows}] = await db.query(
+    `UPDATE leads SET customer_id=? , title=?, source=?, notes=?, status=?, assigned_to=? WHERE id=? `,
+     [customer_id, title, source ?? null, notes ?? null, status ?? 'New', assigned_to ?? null, id]
+  );
+  return affectedRows;
+};
+
+const destroy = async(id) =>{
+  const [{affectedRows}] =await db.query(`DELETE FROM leads WHERE id=?`, [id]);
+  return affectedRows;
+}
+module.exports = { findAll, findById, store, update, destroy };

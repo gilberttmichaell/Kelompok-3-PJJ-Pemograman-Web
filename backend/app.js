@@ -1,5 +1,6 @@
 //import express
 require("dotenv").config();
+const errorHandler = require("./middleware/errorHandler");
 const express = require("express");
 const router = require("./routes/api");
 const db = require("./config/database");
@@ -26,6 +27,8 @@ app.get("/test-db", (req, res)=>{
         }
     });
 });
+
+app.use(errorHandler);
 const PORT = process.env.PORT || 3000 
 //deklarasi port => lintasan aplikasi
 app.listen(PORT, ()=>{

@@ -15,7 +15,7 @@ const findAll = async () => {
      ORDER BY a.activity_date DESC`
   );
   return rows;
-};
+}
 
 const findById = async (id) => {
   const [rows] = await db.query(
@@ -31,6 +31,30 @@ const findById = async (id) => {
     [id]
   );
   return rows[0] ?? null;
-};
+}
 
-module.exports = { findAll, findById };
+//Menambahkan data activities
+const store = async({customer_id, type, description, activity_date, created_by}) => {//parameter sesuaikan dengan kolom yang ada di table
+    const [{insertId}] = await db.query(
+        `INSERT INTO activities (customer_id, type, description, activity_date, created_by) VALUES (?, ?, ?, ?, ?)`,
+        [customer_id, type ?? null, description ?? null, activity_date ?? null, created_by ?? null]
+    );
+return insertId;
+}
+
+//Mengupdate data activities
+const update = async(id, {customer_id, type, description, activity_date}) => {
+const [{affectedRows}] = await db.query(
+    `UPDATE activities SET customer_id=?, type=?, description=?, activity_date=? WHERE id=?`,
+    [customer_id, type ?? null, description ?? null, activity_date ?? null, id]
+);
+return affectedRows;
+}
+
+//Menghapus data activities
+const destroy = async (id) =>{
+    const[{affectedRows}] = await db.query (`DELETE FROM activities WHERE id=?`, [id]);
+    return affectedRows;
+}
+
+module.exports = { findAll, findById, store, update, destroy };
