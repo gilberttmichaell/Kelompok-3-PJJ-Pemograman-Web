@@ -1,0 +1,159 @@
+<div class="container-fluid">
+
+  <h1 class="h3 mb-4 text-gray-800">
+    Customer
+  </h1>
+
+  <div class="card shadow mb-4">
+
+    <div class="card-body">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h5 class="mb-0">
+          Daftar Customer
+        </h5>
+
+        <button
+          class="btn btn-primary"
+          (click)="showForm = !showForm">
+
+          <i class="fas fa-plus"></i>
+          Tambah Customer
+
+        </button>
+
+      </div>
+
+      <!-- Form Customer -->
+      <div
+        class="card mb-4"
+        *ngIf="showForm">
+
+        <div class="card-header">
+          {{ isEditMode ? 'Edit Customer' : 'Tambah Customer' }}
+        </div>
+
+        <div class="card-body">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Nama"
+            [(ngModel)]="newCustomer.name">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Email"
+            [(ngModel)]="newCustomer.email">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Phone"
+            [(ngModel)]="newCustomer.phone">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Company"
+            [(ngModel)]="newCustomer.company">
+
+          <select
+            class="form-control mb-3"
+            [(ngModel)]="newCustomer.status">
+
+            <option value="Lead">Lead</option>
+            <option value="Active">Active</option>
+            <option value="Prospect">Prospect</option>
+
+          </select>
+
+          <button
+            *ngIf="!isEditMode"
+            class="btn btn-primary"
+            (click)="createCustomer()">
+
+            Simpan
+
+          </button>
+
+          <button
+            *ngIf="isEditMode"
+            class="btn btn-warning"
+            (click)="updateCustomer()">
+
+            Update
+
+          </button>
+
+          <button
+            class="btn btn-secondary ms-2"
+            (click)="cancelEdit()">
+
+            Batal
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Table Customer -->
+      <table class="table table-bordered table-hover">
+
+        <thead>
+
+          <tr>
+
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th width="150">Aksi</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let c of customers">
+
+            <td>{{ c.id }}</td>
+            <td>{{ c.name }}</td>
+            <td>{{ c.email }}</td>
+            <td>{{ c.phone }}</td>
+            <td>{{ c.company }}</td>
+            <td>{{ c.status }}</td>
+
+            <td>
+
+              <button
+                class="btn btn-warning btn-sm me-1"
+                (click)="editCustomer(c)">
+
+                Edit
+
+              </button>
+
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="deleteCustomer(c.id!)">
+
+                Hapus
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

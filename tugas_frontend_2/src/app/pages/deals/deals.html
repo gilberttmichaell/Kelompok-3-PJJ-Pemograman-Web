@@ -1,0 +1,35 @@
+<div class="container">
+
+  <h2>Deal List</h2>
+
+  <table class="table table-bordered">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Customer</th>
+        <th>Lead</th>
+        <th>Title</th>
+        <th>Value</th>
+        <th>Stage</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let d of deals">
+
+        <td>{{ d.id }}</td>
+        <td>{{ d.customer_name }}</td>
+        <td>{{ d.lead_title }}</td>
+        <td>{{ d.title }}</td>
+        <td>{{ d.value }}</td>
+        <td>{{ d.stage }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

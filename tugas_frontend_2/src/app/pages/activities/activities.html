@@ -1,0 +1,100 @@
+<div class="container-fluid">
+
+  <h1 class="h3 mb-4 text-gray-800">
+    Activities
+  </h1>
+
+  <div class="card shadow mb-4">
+    <div class="card-body">
+<div class="d-flex justify-content-between mb-3">
+
+  <h5 class="mb-0">Daftar Activities</h5>
+
+  <button
+    class="btn btn-primary"
+    (click)="showForm = !showForm">
+
+    <i class="fas fa-plus"></i>
+    Tambah Activity
+
+  </button>
+
+</div>
+@if(showForm){
+
+<div class="card mb-3">
+  <div class="card-body">
+
+    <div class="mb-3">
+      <label>Customer ID</label>
+      <input
+        type="number"
+        class="form-control"
+        [(ngModel)]="newActivity.customer_id">
+    </div>
+
+    <div class="mb-3">
+      <label>Type</label>
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="newActivity.type">
+    </div>
+
+    <div class="mb-3">
+      <label>Description</label>
+      <textarea
+        class="form-control"
+        [(ngModel)]="newActivity.description">
+      </textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>Date</label>
+      <input
+        type="date"
+        class="form-control"
+        [(ngModel)]="newActivity.activity_date">
+    </div>
+
+    <button
+      class="btn btn-success"
+      (click)="createActivity()">
+
+      Simpan
+
+    </button>
+
+  </div>
+</div>
+
+}
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Date</th>
+      <th>Customer</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (activity of activities; track activity.id) {
+
+      <tr>
+        <td>{{ activity.id }}</td>
+        <td>{{ activity.type }}</td>
+        <td>{{ activity.description }}</td>
+        <td>{{ activity.activity_date }}</td>
+        <td>{{ activity.customer_name }}</td>
+      </tr>
+
+    }
+  </tbody>
+</table>
+    </div>
+  </div>
+
+</div>

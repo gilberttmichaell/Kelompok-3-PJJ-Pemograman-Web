@@ -1,0 +1,134 @@
+<div class="container-fluid">
+
+  <h1 class="h3 mb-4 text-gray-800">
+    Contact
+  </h1>
+
+  <div class="card shadow mb-4">
+
+    <div class="card-body">
+
+      <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h5 class="mb-0">
+          Daftar Contact
+        </h5>
+
+        <button
+          class="btn btn-primary"
+          (click)="showForm = !showForm">
+
+          <i class="fas fa-plus"></i>
+          Tambah Contact
+
+        </button>
+
+      </div>
+
+      <!-- Form Contact -->
+      <div
+        class="card mb-4"
+        *ngIf="showForm">
+
+        <div class="card-header">
+          Tambah Contact
+        </div>
+
+        <div class="card-body">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Customer ID"
+            [(ngModel)]="newContact.customer_id">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Nama"
+            [(ngModel)]="newContact.name">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Email"
+            [(ngModel)]="newContact.email">
+
+          <input
+            class="form-control mb-2"
+            placeholder="Phone"
+            [(ngModel)]="newContact.phone">
+
+          <input
+            class="form-control mb-3"
+            placeholder="Position"
+            [(ngModel)]="newContact.position">
+
+          <button
+            class="btn btn-primary"
+            (click)="createContact()">
+
+            Simpan
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Table Contact -->
+      <table class="table table-bordered table-hover">
+
+        <thead>
+
+          <tr>
+
+            <th>Customer ID</th>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Position</th>
+            <th width="150">Aksi</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let c of contacts">
+
+            <td>{{ c.customer_id }}</td>
+            <td>{{ c.name }}</td>
+            <td>{{ c.email }}</td>
+            <td>{{ c.phone }}</td>
+            <td>{{ c.position }}</td>
+
+            <td>
+
+              <button
+                class="btn btn-warning btn-sm me-1"
+                disabled>
+
+                Edit
+
+              </button>
+
+              <button
+                class="btn btn-danger btn-sm"
+                disabled>
+
+                Hapus
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
