@@ -1,0 +1,18 @@
+.app-footer {
+  margin-top: auto;
+  padding: 1.1rem 1.5rem;
+  background: #ffffff;
+  border-top: 1px solid var(--crm-border);
+  color: var(--crm-muted);
+  font-size: 0.78rem;
+}
+
+.app-footer .container-fluid {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-note {
+  color: #475569;
+  font-weight: 600;
+}

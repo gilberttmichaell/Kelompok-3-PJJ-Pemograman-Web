@@ -1,56 +1,66 @@
-// models/leadModel.js
-
 const db = require('../config/database');
 
 const findAll = async () => {
-  const [rows] = await db.query(
-    `SELECT l.id, l.title, l.source, l.notes, l.status, l.assigned_to, l.created_at,
-            c.id   AS customer_id,
-            c.name AS customer_name
-     FROM   leads l
-     LEFT JOIN customers c ON l.customer_id = c.id
-     ORDER BY l.created_at DESC`
-  );
-  return rows;
+  const [data] = await db.query(`
+    SELECT l.*,
+           c.name AS customer_name,
+           c.company AS customer_company,
+           u.name AS assigned_name,
+           d.id AS deal_id,
+           d.stage AS deal_stage,
+           d.value AS deal_value
+    FROM leads l
+    LEFT JOIN customers c ON c.id = l.customer_id
+    LEFT JOIN users u ON u.id = l.assigned_to
+    LEFT JOIN deals d ON d.lead_id = l.id
+    ORDER BY l.created_at DESC
+  `);
+  return data;
 };
 
 const findById = async (id) => {
-  const [rows] = await db.query(
-    `SELECT l.id, l.title, l.source, l.notes, l.status, l.assigned_to, l.created_at,
-            c.id      AS customer_id,
-            c.name    AS customer_name,
-            c.company AS customer_company
-     FROM   leads l
-     LEFT JOIN customers c ON l.customer_id = c.id
-     WHERE  l.id = ?`,
-    [id]
-  );
-  return rows[0] ?? null;
+  const [[data]] = await db.query(`
+    SELECT l.*,
+           c.name AS customer_name,
+           c.company AS customer_company,
+           u.name AS assigned_name,
+           d.id AS deal_id,
+           d.stage AS deal_stage,
+           d.value AS deal_value
+    FROM leads l
+    LEFT JOIN customers c ON c.id = l.customer_id
+    LEFT JOIN users u ON u.id = l.assigned_to
+    LEFT JOIN deals d ON d.lead_id = l.id
+    WHERE l.id=?
+  `, [id]);
+  return data;
 };
 
-//menambahkan data leads
-const store = async ({customer_id, title, source, notes, status, assigned_to}) =>{
-  const [{insertId}] =await db.query(
+const store = async ({ customer_id, title, source, notes, status, assigned_to }) => {
+  const [{ insertId }] = await db.query(
     `INSERT INTO leads (customer_id, title, source, notes, status, assigned_to)
-    VALUES (?,?,?,?,?,?)
-    `, 
-
+     VALUES (?, ?, ?, ?, ?, ?)`,
     [customer_id, title, source ?? null, notes ?? null, status ?? 'New', assigned_to ?? null]
-
   );
   return insertId;
-}
+};
 
-const update = async (id, {customer_id, title, source, notes, status, assigned_to}) => {
-  const [{affectedRows}] = await db.query(
-    `UPDATE leads SET customer_id=? , title=?, source=?, notes=?, status=?, assigned_to=? WHERE id=? `,
-     [customer_id, title, source ?? null, notes ?? null, status ?? 'New', assigned_to ?? null, id]
+const update = async (id, { customer_id, title, source, notes, status, assigned_to }) => {
+  const [{ affectedRows }] = await db.query(
+    `UPDATE leads
+     SET   customer_id=?, title=?, source=?, notes=?, status=?, assigned_to=?
+     WHERE id=?`,
+    [customer_id, title, source ?? null, notes ?? null, status ?? 'New', assigned_to ?? null, id]
   );
   return affectedRows;
 };
 
-const destroy = async(id) =>{
-  const [{affectedRows}] =await db.query(`DELETE FROM leads WHERE id=?`, [id]);
+const destroy = async (id) => {
+  const [{ affectedRows }] = await db.query(
+    `DELETE FROM leads WHERE id=?`,
+    [id]
+  );
   return affectedRows;
-}
+};
+
 module.exports = { findAll, findById, store, update, destroy };

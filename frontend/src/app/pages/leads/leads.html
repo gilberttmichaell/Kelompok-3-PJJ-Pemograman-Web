@@ -1,0 +1,199 @@
+<div [hidden]="view !== 'list'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">Leads</h1>
+    <p class="mb-4">Kelola seluruh data Leads pada CRM.</p>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Daftar Leads</h6>
+        <button class="btn btn-primary btn-sm" (click)="showCreate()">
+          <i class="fas fa-plus"></i> Tambah Lead
+        </button>
+      </div>
+        <div class="table-responsive">
+          <table #datatablesSimple id="datatablesSimple" class="table table-bordered table-hover" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th width="70">ID</th>
+                <th>Title</th>
+                <th>Customer</th>
+                <th>Source</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th width="150">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let l of leads">
+                <td>{{ l.id }}</td>
+                <td>{{ l.title }}</td>
+                <td>{{ l.customer_name || l.customer_id }}</td>
+                <td>{{ l.source }}</td>
+                <td>
+                  <span class="badge bg-info text-dark p-2">{{ l.status }}</span>
+                </td>
+                <td>{{ l.assigned_name || l.assigned_to }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm" data-action="edit" [attr.data-id]="l.id">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  &nbsp;
+                  <button *ngIf="isAdmin" class="btn btn-danger btn-sm" data-action="delete" [attr.data-id]="l.id">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div [hidden]="view !== 'create'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Tambah Lead</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Form Tambah Lead</h6>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Title</label>
+              <input type="text" class="form-control" formControlName="title" placeholder="Judul lead">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Customer / Perusahaan</label>
+              <select class="form-control form-select" formControlName="customer_id">
+                <option [ngValue]="null" disabled selected>-- Pilih Customer --</option>
+                <option *ngFor="let cust of customers" [ngValue]="cust.id">
+                  {{ cust.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Source</label>
+              <select class="form-control form-select" formControlName="source">
+                <option value="" disabled selected>-- Pilih Source --</option>
+                <option value="Website">Website</option>
+                <option value="Referral">Referral</option>
+                <option value="Social Media">Social Media</option>
+                <option value="Event">Event</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Status</label>
+              <select class="form-control form-select" formControlName="status">
+                <option value="New">New</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Qualified">Qualified</option>
+                <option value="Won">Won</option>
+                <option value="Lost">Lost</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Assigned To (User ID)</label>
+              <input type="number" class="form-control" formControlName="assigned_to" placeholder="ID user">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label font-weight-bold text-gray-800 d-block">Notes</label>
+            <textarea class="form-control" formControlName="notes" rows="4" placeholder="Catatan tambahan..."></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Menyimpan...' : 'Simpan Lead' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="view !== 'edit'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Edit Lead</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-warning">Form Edit Lead</h6>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="editForm" (ngSubmit)="submitUpdate()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Title</label>
+              <input type="text" class="form-control" formControlName="title">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Customer / Perusahaan</label>
+              <select class="form-select" formControlName="customer_id">
+                <option [ngValue]="null" disabled>-- Pilih Customer --</option>
+                <option *ngFor="let cust of customers" [ngValue]="cust.id">
+                  {{ cust.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Source</label>
+              <select class="form-select" formControlName="source">
+                <option value="" disabled>-- Pilih Source --</option>
+                <option value="Website">Website</option>
+                <option value="Referral">Referral</option>
+                <option value="Social Media">Social Media</option>
+                <option value="Event">Event</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Status</label>
+              <select class="form-select" formControlName="status">
+                <option value="New">New</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Qualified">Qualified</option>
+                <option value="Won">Won</option>
+                <option value="Lost">Lost</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Assigned To (User ID)</label>
+              <input type="number" class="form-control" formControlName="assigned_to">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label>Notes</label>
+            <textarea class="form-control" formControlName="notes" rows="4"></textarea>
+          </div>
+
+          <button class="btn btn-warning" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Update...' : 'Update Lead' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

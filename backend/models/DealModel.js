@@ -1,5 +1,3 @@
-// models/dealModel.js
-
 const db = require('../config/database');
 
 const findAll = async () => {
@@ -34,24 +32,58 @@ const findById = async (id) => {
   );
   return rows[0] ?? null;
 };
-const createFormLead = async (leadId, title, stage) => {
-  const [{insertId}] = await db.query(
+
+// CRUD manual
+const store = async ({ lead_id, title, value, stage, closed_at }) => {
+  const [{ insertId }] = await db.query(
+    `INSERT INTO deals (lead_id, title, value, stage, closed_at)
+     VALUES (?, ?, ?, ?, ?)`,
+    [lead_id ?? null, title, value ?? 0, stage ?? null, closed_at ?? null]
+  );
+  return insertId;
+};
+
+const update = async (id, { lead_id, title, value, stage, closed_at }) => {
+  const [{ affectedRows }] = await db.query(
+    `UPDATE deals
+     SET   lead_id=?, title=?, value=?, stage=?, closed_at=?
+     WHERE id=?`,
+    [lead_id ?? null, title, value ?? 0, stage ?? null, closed_at ?? null, id]
+  );
+  return affectedRows;
+};
+
+const destroy = async (id) => {
+  const [{ affectedRows }] = await db.query(
+    `DELETE FROM deals WHERE id=?`,
+    [id]
+  );
+  return affectedRows;
+};
+
+// business process (dipanggil dari LeadController) — tetap dipertahankan
+const createFromLead = async (leadId, title, stage) => {
+  const [{ insertId }] = await db.query(
     `INSERT INTO deals (lead_id, title, stage) VALUES (?,?,?)`,
     [leadId, title, stage ?? null]
   );
   return insertId;
-}
-
-const updateStageByLeadId = async (leadId, stage, value = null) => {
-  await db.query(
-    `UPDATE deals SET stage=?, value=? WHERE lead_id=?`,
-    [stage ??null, value, leadId]
-  );
 };
 
-const removeByLeadId = async (leadId) =>{
-  await db.query(`DELETE FROM deals WHERE lead_id =?`, [leadId]);
+const updateStageByLeadId = async (leadId, stage, value) => {
+  if (value === undefined || value === null || value === '') {
+    await db.query("UPDATE deals SET stage=? WHERE lead_id=?", [stage, leadId]);
+    return;
+  }
+  await db.query("UPDATE deals SET stage=?, value=? WHERE lead_id=?", [stage, value, leadId]);
 };
 
+const removeByLeadId = async (leadId) => {
+  await db.query("DELETE FROM deals WHERE lead_id = ?", [leadId]);
+};
 
-module.exports = { findAll, findById , createFormLead, updateStageByLeadId, removeByLeadId};
+module.exports = {
+  findAll, findById,
+  store, update, destroy,
+  createFromLead, updateStageByLeadId, removeByLeadId
+};

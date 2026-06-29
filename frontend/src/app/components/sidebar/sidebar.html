@@ -1,0 +1,92 @@
+<ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
+  <a class="sidebar-brand d-flex align-items-center" routerLink="/dashboard">
+    <div class="sidebar-brand-icon">
+      <i class="fas fa-layer-group"></i>
+    </div>
+    <div class="sidebar-brand-copy">
+      <strong>Dashboard CRM</strong>
+      <span>Business Suite</span>
+    </div>
+  </a>
+
+  <div class="sidebar-section">Workspace</div>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/dashboard">
+      <i class="fas fa-fw fa-chart-pie"></i>
+      <span>Dashboard</span>
+    </a>
+  </li>
+
+  <div class="sidebar-section">Data Pelanggan</div>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/customer">
+      <i class="fas fa-fw fa-building"></i>
+      <span>Customers</span>
+    </a>
+  </li>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/contact">
+      <i class="fas fa-fw fa-address-book"></i>
+      <span>Contacts</span>
+    </a>
+  </li>
+
+  <div class="sidebar-section">Data Transaksi</div>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/leads">
+      <i class="fas fa-fw fa-filter"></i>
+      <span>Leads</span>
+    </a>
+  </li>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/deals">
+      <i class="fas fa-fw fa-handshake"></i>
+      <span>Deals</span>
+    </a>
+  </li>
+
+  <div class="sidebar-section">Aktivitas</div>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/activities">
+      <i class="fas fa-fw fa-calendar-check"></i>
+      <span>Activities</span>
+    </a>
+  </li>
+
+  <div class="sidebar-section">Komunikasi</div>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/notifications">
+      <i class="fas fa-fw fa-bell"></i>
+      <span>Notifications</span>
+    </a>
+  </li>
+
+  <li class="nav-item" routerLinkActive="active">
+    <a class="nav-link" routerLink="/messages">
+      <i class="fas fa-fw fa-envelope"></i>
+      <span>Messages</span>
+    </a>
+  </li>
+
+  <div class="sidebar-section" *ngIf="isAdmin">Manajemen User</div>
+
+  <li class="nav-item" *ngIf="isAdmin" routerLinkActive="active">
+    <a class="nav-link" routerLink="/users">
+      <i class="fas fa-fw fa-user-shield"></i>
+      <span>Users</span>
+    </a>
+  </li>
+
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-caption">
+    <i class="fas fa-shield-alt"></i>
+    <span>Secure CRM Workspace</span>
+  </div>
+</ul>

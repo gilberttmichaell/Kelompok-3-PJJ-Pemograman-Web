@@ -1,0 +1,154 @@
+.dashboard-page {
+  padding-top: 0.25rem;
+}
+
+.page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.page-heading h1 {
+  margin: 0.2rem 0 0.35rem;
+  font-size: 1.85rem;
+  font-weight: 750;
+}
+
+.page-heading p {
+  margin: 0;
+}
+
+.page-kicker,
+.card-kicker {
+  color: var(--crm-dashboard);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+}
+
+.metric-card {
+  display: flex;
+  min-height: 132px;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.35rem;
+  border: 1px solid var(--crm-border);
+  border-radius: 0.95rem;
+  background: #ffffff;
+  box-shadow: var(--crm-shadow);
+}
+
+.metric-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  place-items: center;
+  border-radius: 16px;
+  font-size: 1.25rem;
+}
+
+.metric-card span {
+  display: block;
+  color: #53627a;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--crm-text);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.metric-dashboard .metric-icon {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.metric-amber .metric-icon {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.metric-emerald .metric-icon {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.insight-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+}
+
+.insight-card .card-header h6 {
+  margin: 0.15rem 0 0;
+  font-weight: 750;
+}
+
+.insight-card .card-header > i {
+  color: #6366f1;
+  font-size: 1.1rem;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--crm-border);
+  border-radius: 0.65rem;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.status-row:last-child {
+  margin-bottom: 0;
+}
+
+.status-row strong {
+  display: grid;
+  min-width: 34px;
+  height: 28px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--crm-dashboard);
+  color: #ffffff;
+}
+
+.loading-panel,
+.empty-state {
+  display: flex;
+  min-height: 160px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--crm-muted);
+}
+
+.empty-state {
+  flex-direction: column;
+}
+
+.empty-state i {
+  color: #94a3b8;
+  font-size: 1.8rem;
+}
+
+@media (max-width: 575.98px) {
+  .page-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-heading .btn {
+    align-self: flex-start;
+  }
+}

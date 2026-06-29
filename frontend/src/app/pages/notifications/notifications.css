@@ -1,0 +1,79 @@
+.notification-page .page-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.page-kicker {
+  color: #4f46e5;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.notification-page h1 {
+  margin: 0.25rem 0 0.35rem;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.notification-page p {
+  margin: 0;
+  color: #64748b;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.notification-unread {
+  background: #eef2ff;
+  border-left: 4px solid #4f46e5;
+}
+
+.notification-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  border-radius: 999px;
+  background: #4f46e5;
+  color: #ffffff;
+}
+
+.notification-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.notification-copy a,
+.notification-copy span {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.notification-copy small {
+  color: #64748b;
+}
+
+.empty-state {
+  display: grid;
+  gap: 0.8rem;
+  place-items: center;
+  padding: 4rem 1rem;
+  color: #94a3b8;
+}
+
+.empty-state i {
+  font-size: 2.6rem;
+}

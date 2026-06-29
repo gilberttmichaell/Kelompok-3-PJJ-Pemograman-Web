@@ -1,0 +1,22 @@
+<nav class="navbar navbar-expand app-topbar mb-4">
+  <button id="sidebarToggleTop" class="btn mobile-menu d-md-none mr-3" type="button" aria-label="Buka navigasi">
+    <i class="fa fa-bars"></i>
+  </button>
+
+  <div class="topbar-heading mr-auto">
+    <span class="topbar-kicker">CRM WORKSPACE</span>
+    <span class="topbar-title">Business Process Dashboard</span>
+  </div>
+
+  <div class="account-summary">
+    <div class="account-avatar">{{ initial }}</div>
+    <div class="account-copy d-none d-sm-flex">
+      <strong>{{ name || 'Pengguna' }}</strong>
+      <span>{{ role || 'staff' }}</span>
+    </div>
+    <button class="btn logout-button" type="button" (click)="onLogout()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span class="d-none d-lg-inline ml-2">Keluar</span>
+    </button>
+  </div>
+</nav>

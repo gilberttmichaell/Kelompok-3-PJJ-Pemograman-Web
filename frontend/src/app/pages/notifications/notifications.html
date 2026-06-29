@@ -1,0 +1,62 @@
+<div class="container-fluid notification-page">
+  <div class="page-heading">
+    <div>
+      <span class="page-kicker">COMMUNICATION</span>
+      <h1>Notifications</h1>
+      <p>Pantau notifikasi terbaru dari aktivitas CRM dan pesan tim.</p>
+    </div>
+    <a routerLink="/messages" class="btn btn-primary">
+      <i class="fas fa-envelope mr-2"></i> Buka Messages
+    </a>
+  </div>
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold text-primary">Semua Notifikasi</h6>
+      <button
+        *ngIf="notifications.length > 0"
+        class="btn btn-outline-secondary btn-sm"
+        type="button"
+        (click)="markAllRead()">
+        <i class="fas fa-check-double mr-1"></i> Tandai Semua Dibaca
+      </button>
+    </div>
+
+    <div class="card-body p-0">
+      <div *ngIf="isLoading" class="text-center text-muted py-5">
+        Memuat notifikasi...
+      </div>
+
+      <div *ngIf="!isLoading && notifications.length === 0" class="empty-state">
+        <i class="fas fa-bell-slash"></i>
+        <span>Tidak ada notifikasi baru.</span>
+      </div>
+
+      <div
+        *ngFor="let item of notifications"
+        class="notification-item"
+        [class.notification-unread]="!item.is_read">
+        <div class="notification-icon">
+          <i class="fas fa-bell"></i>
+        </div>
+
+        <div class="notification-copy">
+          <a *ngIf="item.action_url" [routerLink]="item.action_url">
+            {{ item.message }}
+          </a>
+          <span *ngIf="!item.action_url">{{ item.message }}</span>
+          <small>{{ item.created_at | date:'d MMM yyyy, HH:mm' }}</small>
+        </div>
+
+        <button
+          *ngIf="!item.is_read"
+          class="btn btn-sm btn-outline-primary"
+          type="button"
+          (click)="markRead(item.id)">
+          Tandai Dibaca
+        </button>
+        <span *ngIf="item.is_read" class="badge bg-light text-muted">Dibaca</span>
+      </div>
+    </div>
+  </div>
+</div>

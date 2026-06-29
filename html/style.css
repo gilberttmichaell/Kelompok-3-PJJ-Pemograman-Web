@@ -1,0 +1,193 @@
+/* RESET & BASE */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* SELECTOR: TAG */
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+p {
+    line-height: 1.6;
+}
+
+/* SELECTOR: ID */
+#form {
+    background: #fff;
+}
+
+#list {
+    background: #fffbf6;
+}
+
+#table {
+    background: #f8f8ff;
+}
+
+/* SELECTOR: CLASS */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.badge-active {
+    color: green;
+    font-weight: bold;
+}
+
+.badge-inactive {
+    color: red;
+    font-weight: bold;
+}
+
+/* PSEUDO CLASS */
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+button:hover {
+    background: #0056b3;
+    cursor: pointer;
+}
+
+tr:nth-child(even) {
+    background: #f2f2f2;
+}
+
+input:focus {
+    border-color: #007bff;
+    border-width: 2px;
+}
+
+li:first-child {
+    font-weight: bold;
+}
+
+/* ATTRIBUTE */
+input[type="email"] {
+    border-left: 3px solid #007bff;
+}
+
+input[type="text"] {
+    border-left: 3px solid #28a745;
+}
+
+a[href*="#"] {
+    color: #555;
+    text-decoration: none;
+}
+
+/* BOX MODEL */
+header {
+    padding: 16px 20px;
+    background: #007bff;
+    color: white;
+}
+
+nav {
+    margin-top: 8px;
+}
+
+section {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+footer {
+    margin-top: 20px;
+    padding: 12px 20px;
+    background: #333;
+    color: white;
+}
+
+/* FORM */
+label {
+    display: block;
+    margin: 10px 0 4px;
+    font-size: 14px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+button {
+    margin-top: 12px;
+    padding: 10px 24px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #007bff;
+    color: white;
+}
+
+/* FLEXBOX */
+.flex-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    section {
+        padding: 12px;
+    }
+}

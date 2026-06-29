@@ -1,0 +1,155 @@
+<div [hidden]="view !== 'list'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">Users</h1>
+    <p class="mb-4">Kelola seluruh data user pada CRM.</p>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Daftar User</h6>
+        <button class="btn btn-primary btn-sm" (click)="showCreate()">
+          <i class="fas fa-plus"></i> Tambah User
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table #datatablesSimple id="datatablesSimple" class="table table-bordered table-hover" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th width="70">ID</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th width="150">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let u of users">
+                <td>{{ u.id }}</td>
+                <td>{{ u.name }}</td>
+                <td>{{ u.email }}</td>
+                <td>
+                  <span *ngIf="u.role=='admin'" class="badge bg-danger">Admin</span>
+                  <span *ngIf="u.role=='staff'" class="badge bg-primary">Staff</span>
+                  <span *ngIf="u.role=='sales'" class="badge bg-success">Sales</span>
+                </td>
+                <td>
+                  <button class="btn btn-warning btn-sm" data-action="edit" [attr.data-id]="u.id">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  &nbsp;
+                  <button class="btn btn-danger btn-sm" data-action="delete" [attr.data-id]="u.id">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= CREATE USER ========================= -->
+<div [hidden]="view !== 'create'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Tambah User</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Form Tambah User</h6>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Nama</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Masukkan nama">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Email</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="Masukkan email">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Password</label>
+              <input type="password" class="form-control" formControlName="password" placeholder="Masukkan password">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Role</label>
+              <select class="form-control" formControlName="role">
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+                <option value="sales">Sales</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Menyimpan...' : 'Simpan User' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= EDIT USER ========================= -->
+<div [hidden]="view !== 'edit'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Edit User</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-warning">Form Edit User</h6>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="editForm" (ngSubmit)="submitUpdate()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Nama</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Masukkan nama">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Email</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="Masukkan email">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Password Baru</label>
+              <input type="password" class="form-control" formControlName="password" placeholder="Kosongkan jika tidak ingin mengubah password">
+              <small class="text-muted">Kosongkan jika password tidak ingin diubah.</small>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Role</label>
+              <select class="form-control" formControlName="role">
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+                <option value="sales">Sales</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn btn-warning" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Mengupdate...' : 'Update User' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

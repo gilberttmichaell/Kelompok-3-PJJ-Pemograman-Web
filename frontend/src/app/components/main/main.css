@@ -1,0 +1,19 @@
+.app-shell {
+  min-height: 100vh;
+  background: var(--crm-bg);
+}
+
+#content-wrapper {
+  min-width: 0;
+  background: var(--crm-bg);
+}
+
+.app-main {
+  padding: 0 1.5rem 1.75rem;
+}
+
+@media (max-width: 767.98px) {
+  .app-main {
+    padding: 0 0.75rem 1.25rem;
+  }
+}

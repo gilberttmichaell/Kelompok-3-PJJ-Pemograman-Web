@@ -1,0 +1,101 @@
+<div class="container-fluid dashboard-page">
+  <div class="page-heading">
+    <div>
+      <span class="page-kicker">OVERVIEW</span>
+      <h1>Dashboard</h1>
+      <p>Pantau customer, lead, dan perkembangan pipeline dalam satu tampilan.</p>
+    </div>
+    <button class="btn btn-outline-primary" type="button" (click)="loadDashboardData()">
+      <i class="fas fa-sync-alt mr-2"></i>Refresh
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-panel">
+    <div class="spinner-border text-primary" role="status"></div>
+    <span>Memuat ringkasan CRM...</span>
+  </div>
+
+  <div *ngIf="errorMsg" class="alert alert-danger">
+    {{ errorMsg }}
+  </div>
+
+  <ng-container *ngIf="stats">
+    <div class="row metric-grid">
+      <div class="col-xl-4 col-md-6 mb-4">
+        <div class="metric-card metric-dashboard">
+          <div class="metric-icon"><i class="fas fa-building"></i></div>
+          <div>
+            <span>Total Customers</span>
+            <strong>{{ stats.customers ?? 0 }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-4 col-md-6 mb-4">
+        <div class="metric-card metric-amber">
+          <div class="metric-icon"><i class="fas fa-filter"></i></div>
+          <div>
+            <span>Total Leads</span>
+            <strong>{{ stats.leads ?? 0 }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-4 col-md-6 mb-4">
+        <div class="metric-card metric-emerald">
+          <div class="metric-icon"><i class="fas fa-handshake"></i></div>
+          <div>
+            <span>Total Deals</span>
+            <strong>{{ stats.deals ?? 0 }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 mb-4">
+        <div class="card insight-card h-100">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">LEAD HEALTH</span>
+              <h6>Status Leads</h6>
+            </div>
+            <i class="fas fa-chart-bar"></i>
+          </div>
+          <div class="card-body">
+            <div class="status-row" *ngFor="let item of stats.leads_by_status || []">
+              <span>{{ item.status || 'Tanpa Status' }}</span>
+              <strong>{{ item.total }}</strong>
+            </div>
+            <div class="empty-state" *ngIf="!(stats.leads_by_status && stats.leads_by_status.length)">
+              <i class="fas fa-inbox"></i>
+              <span>Belum ada data lead</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 mb-4">
+        <div class="card insight-card h-100">
+          <div class="card-header">
+            <div>
+              <span class="card-kicker">SALES PIPELINE</span>
+              <h6>Stage Deals</h6>
+            </div>
+            <i class="fas fa-stream"></i>
+          </div>
+          <div class="card-body">
+            <div class="status-row" *ngFor="let item of stats.deal_by_status || []">
+              <span>{{ item.stage || 'Open' }}</span>
+              <strong>{{ item.total }}</strong>
+            </div>
+            <div class="empty-state" *ngIf="!(stats.deal_by_status && stats.deal_by_status.length)">
+              <i class="fas fa-inbox"></i>
+              <span>Belum ada data deal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

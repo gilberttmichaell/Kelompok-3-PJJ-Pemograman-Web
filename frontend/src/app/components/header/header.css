@@ -1,0 +1,86 @@
+.app-topbar {
+  min-height: 76px;
+  padding: 0.75rem 1.75rem;
+  background: #ffffff;
+  border-bottom: 1px solid var(--crm-border);
+  box-shadow: 0 5px 18px rgba(30, 41, 59, 0.06);
+}
+
+.topbar-heading {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.topbar-kicker {
+  color: var(--crm-dashboard);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.topbar-title {
+  margin-top: 0.2rem;
+  color: var(--crm-text);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.account-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.account-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--crm-dashboard);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.account-copy {
+  flex-direction: column;
+  min-width: 90px;
+}
+
+.account-copy strong {
+  color: var(--crm-text);
+  font-size: 0.84rem;
+}
+
+.account-copy span {
+  color: var(--crm-muted);
+  font-size: 0.72rem;
+  text-transform: capitalize;
+}
+
+.logout-button,
+.mobile-menu {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+}
+
+.logout-button:hover,
+.mobile-menu:hover {
+  background: var(--crm-dashboard-soft);
+  border-color: #a5b4fc;
+  color: var(--crm-dashboard);
+}
+
+@media (max-width: 575.98px) {
+  .app-topbar {
+    min-height: 66px;
+    padding: 0.65rem 0.85rem;
+  }
+
+  .topbar-title {
+    font-size: 0.9rem;
+  }
+}

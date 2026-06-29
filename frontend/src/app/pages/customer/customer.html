@@ -1,0 +1,443 @@
+
+<div [hidden]="view !== 'list'">
+
+  <div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">
+      Customer
+    </h1>
+
+    <p class="mb-4">
+      Kelola seluruh data customer pada CRM.
+    </p>
+
+    <!-- Card -->
+    <div class="card shadow mb-4">
+
+      <!-- Header -->
+      <div class="card-header py-3 d-flex justify-content-between align-items-center">
+
+        <h6 class="m-0 font-weight-bold text-primary">
+
+          Daftar Customer
+
+        </h6>
+
+        <button
+          class="btn btn-primary btn-sm"
+          (click)="showCreate()">
+
+          <i class="fas fa-plus"></i>
+
+          Tambah Customer
+
+        </button>
+
+      </div>
+
+      <!-- Body -->
+
+      <div class="card-body">
+
+        <div class="table-responsive">
+
+          <table
+
+            #datatablesSimple
+
+            id="datatablesSimple"
+
+            class="table table-bordered table-hover"
+
+            width="100%"
+
+            cellspacing="0">
+
+            <thead>
+
+              <tr>
+
+                <th width="70">
+                  ID
+                </th>
+
+                <th>
+                  Nama
+                </th>
+
+                <th>
+                  Email
+                </th>
+
+                <th>
+                  Phone
+                </th>
+
+                <th>
+                  Company
+                </th>
+
+                <th width="120">
+                  Status
+                </th>
+
+                <th width="150">
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let c of customers">
+
+                <td>
+
+                  {{ c.id }}
+
+                </td>
+
+                <td>
+
+                  {{ c.name }}
+
+                </td>
+
+                <td>
+
+                  {{ c.email }}
+
+                </td>
+
+                <td>
+
+                  {{ c.phone }}
+
+                </td>
+
+                <td>
+
+                  {{ c.company }}
+
+                </td>
+
+                <td>
+
+                  <span
+
+                    *ngIf="c.status=='Active'"
+
+                    class="badge bg-success">
+
+                    Active
+
+                  </span>
+
+                  <span
+
+                    *ngIf="c.status=='Lead'"
+
+                    class="badge bg-warning text-dark">
+
+                    Lead
+
+                  </span>
+
+                  <span
+
+                    *ngIf="c.status=='Prospect'"
+
+                    class="badge bg-info">
+
+                    Prospect
+
+                  </span>
+
+                </td>
+
+                <td>
+
+                  <button
+
+                    class="btn btn-warning btn-sm"
+
+                    data-action="edit"
+
+                    [attr.data-id]="c.id">
+
+                    <i class="fas fa-edit"></i>
+
+                  </button>
+
+                  &nbsp;
+
+                  <button
+
+                    *ngIf="isAdmin"
+
+                    class="btn btn-danger btn-sm"
+
+                    data-action="delete"
+
+                    [attr.data-id]="c.id">
+
+                    <i class="fas fa-trash"></i>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========================= CREATE CUSTOMER ========================= -->
+<div [hidden]="view !== 'create'">
+
+  <div class="container-fluid">
+
+    <h1 class="h3 mb-4 text-gray-800">
+      Tambah Customer
+    </h1>
+
+    <div class="card shadow mb-4">
+
+      <div class="card-header py-3">
+
+        <h6 class="m-0 font-weight-bold text-primary">
+          Form Tambah Customer
+        </h6>
+
+      </div>
+
+      <div class="card-body">
+
+        <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+
+          <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+              <label>Nama</label>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name">
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+              <label>Company</label>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="company">
+
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+              <label>Email</label>
+
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email">
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+              <label>Phone</label>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="phone">
+
+            </div>
+
+          </div>
+
+        <div class="form-floating mb-3">
+          <label for="inputStatus">Status</label>
+          <select id="status" class="form-control" formControlName="status">
+            <option value="Lead">Lead</option>
+            <option value="Active">Active</option>
+            <option value="Prospect">Prospect</option>
+          </select> 
+        </div>
+          
+        <button class="btn btn-primary" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Menyimpan...' : 'Simpan' }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary ms-2"
+            (click)="view='list'">
+
+            <i class="fas fa-arrow-left"></i>
+
+            Kembali
+
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========================= EDIT CUSTOMER ========================= -->
+
+<div [hidden]="view !== 'edit'">
+
+  <div class="container-fluid">
+
+    <h1 class="h3 mb-4 text-gray-800">
+
+      Edit Customer
+
+    </h1>
+
+    <div class="card shadow mb-4">
+
+      <div class="card-header py-3">
+
+        <h6 class="m-0 font-weight-bold text-warning">
+
+          Form Edit Customer
+
+        </h6>
+
+      </div>
+
+      <div class="card-body">
+
+        <form
+          [formGroup]="editForm"
+          (ngSubmit)="submitUpdate()">
+
+          <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+              <label>Nama</label>
+
+              <input
+                class="form-control"
+                formControlName="name">
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+              <label>Company</label>
+
+              <input
+                class="form-control"
+                formControlName="company">
+
+            </div>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+              <label>Email</label>
+
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email">
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+              <label>Phone</label>
+
+              <input
+                class="form-control"
+                formControlName="phone">
+
+            </div>
+
+          </div>
+
+          <div class="mb-3">
+
+            <label>Status</label>
+
+            <select
+              class="form-select"
+              formControlName="status">
+
+              <option value="Lead">Lead</option>
+              <option value="Active">Active</option>
+              <option value="Prospect">Prospect</option>
+
+            </select>
+
+          </div>
+
+          <button
+            class="btn btn-warning"
+            type="submit"
+            [disabled]="isSaving">
+
+            <i class="fas fa-save"></i>
+
+            {{ isSaving ? 'Update...' : 'Update Customer' }}
+
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary ms-2"
+            (click)="view='list'">
+
+            <i class="fas fa-arrow-left"></i>
+
+            Kembali
+
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

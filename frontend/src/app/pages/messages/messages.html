@@ -1,0 +1,83 @@
+<div class="container-fluid messages-page">
+  <div class="page-heading">
+    <div>
+      <span class="page-kicker">COMMUNICATION</span>
+      <h1>Messages</h1>
+      <p>Kirim dan baca pesan antar anggota tim CRM.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4 mb-4">
+      <div class="card shadow h-100">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Kirim Pesan Baru</h6>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+            <div class="mb-3">
+              <label class="form-label font-weight-bold">Kirim Ke</label>
+              <select class="form-control form-select" formControlName="receiver_id">
+                <option [ngValue]="null" disabled>-- Pilih Penerima --</option>
+                <option *ngFor="let user of users" [ngValue]="user.id">
+                  {{ user.name }} ({{ user.role }})
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label font-weight-bold">Pesan</label>
+              <textarea class="form-control" formControlName="message" rows="5" placeholder="Tulis pesan..."></textarea>
+            </div>
+
+            <button class="btn btn-primary w-100" type="submit" [disabled]="isSaving">
+              <i class="fas fa-paper-plane mr-1"></i>
+              {{ isSaving ? 'Mengirim...' : 'Kirim Pesan' }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+      <div class="card shadow h-100">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Kotak Pesan</h6>
+        </div>
+        <div class="card-body">
+          <div *ngIf="isLoading" class="text-center text-muted py-5">Memuat pesan...</div>
+
+          <div *ngIf="!isLoading && messages.length === 0" class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <span>Tidak ada pesan.</span>
+          </div>
+
+          <div *ngIf="!isLoading" class="message-list">
+            <div *ngFor="let item of messages" class="message-item" [class.message-unread]="!item.is_read && item.receiver_id === myUserId">
+              <div class="d-flex justify-content-between align-items-start gap-3">
+                <div>
+                  <strong *ngIf="item.sender_id === myUserId">
+                    <i class="fas fa-arrow-right text-success mr-1"></i>
+                    Ke: {{ item.receiver_name }}
+                  </strong>
+                  <strong *ngIf="item.sender_id !== myUserId">
+                    <i class="fas fa-arrow-left text-primary mr-1"></i>
+                    Dari: {{ item.sender_name }}
+                  </strong>
+                  <p>{{ item.message }}</p>
+                </div>
+                <small>{{ item.created_at | date:'short' }}</small>
+              </div>
+
+              <div class="text-right" *ngIf="item.receiver_id === myUserId">
+                <button class="btn btn-sm btn-outline-primary" type="button" (click)="replyTo(item.sender_id)">
+                  <i class="fas fa-reply mr-1"></i> Balas
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

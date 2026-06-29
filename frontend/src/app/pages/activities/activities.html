@@ -1,0 +1,172 @@
+<div [hidden]="view !== 'list'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">Activities</h1>
+    <p class="mb-4">Kelola seluruh data Activities pada CRM.</p>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Daftar Activities</h6>
+        <button class="btn btn-primary btn-sm" (click)="showCreate()">
+          <i class="fas fa-plus"></i> Tambah Activity
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table #datatablesSimple id="datatablesSimple" class="table table-bordered table-hover" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th width="70">ID</th>
+                <th>Tipe Aktivitas</th>
+                <th>Customer / Perusahaan</th>
+                <th>Tanggal Aktivitas</th>
+                <th>Deskripsi</th>
+                <th width="150">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let a of activities">
+                <td>{{ a.id }}</td>
+                <td>
+                  <span class="badge bg-secondary text-white p-2">{{ a.type }}</span>
+                </td>
+                <td>{{ a.customer_name }}</td>
+                <td>{{ a.activity_date | date:'dd MMM yyyy' }}</td>
+                <td>{{ a.description }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm" data-action="edit" [attr.data-id]="a.id">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  &nbsp;
+                  <button *ngIf="isAdmin" class="btn btn-danger btn-sm" data-action="delete" [attr.data-id]="a.id">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="view !== 'create'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Tambah Activity</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Form Tambah Activity</h6>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+          <div class="row">
+            
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Tipe Aktivitas</label>
+              <select class="form-control form-select" formControlName="type">
+                <option value="" disabled selected>-- Pilih Tipe --</option>
+                <option value="Call">Call (Telepon)</option>
+                <option value="Meeting">Meeting (Rapat)</option>
+                <option value="Email">Email</option>
+                <option value="Note">Note</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Customer / Perusahaan</label>
+              <select class="form-control form-select" formControlName="customer_id">
+                <option [ngValue]="null" disabled selected>-- Pilih Customer --</option>
+                <option *ngFor="let cust of customers" [ngValue]="cust.id">
+                  {{ cust.name }}
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Tanggal Aktivitas</label>
+              <input type="date" class="form-control" formControlName="activity_date">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label font-weight-bold text-gray-800 d-block">Deskripsi / Catatan</label>
+            <textarea class="form-control" formControlName="description" rows="4" placeholder="Detail hasil pembicaraan atau progress aktivitas..."></textarea>
+          </div>
+          
+          <button class="btn btn-primary" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Menyimpan...' : 'Simpan Activity' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="view !== 'edit'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Edit Activity</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-warning">Form Edit Activity</h6>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="editForm" (ngSubmit)="submitUpdate()">
+          <div class="row">
+            
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Tipe Aktivitas</label>
+              <select class="form-control form-select" formControlName="type">
+                <option value="" disabled>-- Pilih Tipe --</option>
+                <option value="Call">Call (Telepon)</option>
+                <option value="Meeting">Meeting (Rapat)</option>
+                <option value="Email">Email</option>
+                <option value="Note">Note</option>
+              </select>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Customer / Perusahaan</label>
+              <select class="form-control form-select" formControlName="customer_id">
+                <option [ngValue]="null" disabled>-- Pilih Customer --</option>
+                <option *ngFor="let cust of customers" [ngValue]="cust.id">
+                  {{ cust.name }}
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Tanggal Aktivitas</label>
+              <input type="date" class="form-control" formControlName="activity_date">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label font-weight-bold text-gray-800 d-block">Deskripsi / Catatan</label>
+            <textarea class="form-control" formControlName="description" rows="4"></textarea>
+          </div>
+
+          <button class="btn btn-warning" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Update...' : 'Update Activity' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

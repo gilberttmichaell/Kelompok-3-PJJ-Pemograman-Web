@@ -1,0 +1,216 @@
+<div [hidden]="view !== 'list'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-2 text-gray-800">Deals</h1>
+    <p class="mb-4">Kelola seluruh data Deals pada CRM.</p>
+
+    <div class="stage-filter-bar">
+      <button
+        *ngFor="let stage of stageFilters"
+        type="button"
+        class="btn btn-sm stage-filter-btn"
+        [ngClass]="stageFilterClass(stage)"
+        (click)="setStageFilter(stage)">
+        {{ stage }}
+      </button>
+    </div>
+
+    <div class="row flex-nowrap overflow-auto mb-4">
+      <div class="col-xl col-md-4 col-sm-6" *ngFor="let stage of visiblePipelineStages">
+        <div class="card pipeline-column h-100">
+          <div class="card-header pipeline-header text-center">
+            <strong>{{ stage }}</strong>
+            <small>{{ dealsByStage(stage).length }} deal · Rp {{ stageTotal(stage) | number }}</small>
+          </div>
+          <div class="card-body pipeline-body p-2">
+            <div class="card deal-ticket mb-2" *ngFor="let deal of dealsByStage(stage)">
+              <div class="card-body p-2">
+                <div class="font-weight-bold">{{ deal.title }}</div>
+                <small class="text-muted">{{ deal.customer_name || deal.lead_title }}</small>
+                <div class="text-success mt-1">{{ deal.value | number }}</div>
+              </div>
+            </div>
+            <small class="text-muted d-block text-center py-3" *ngIf="!dealsByStage(stage).length">
+              Belum ada deal
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Daftar Deals</h6>
+        <button class="btn btn-primary btn-sm" (click)="showCreate()">
+          <i class="fas fa-plus"></i> Tambah Deal
+        </button>
+      </div>
+
+      <div class="card-body">
+        <div class="table-responsive">
+          <table #datatablesSimple id="datatablesSimple" class="table table-bordered table-hover" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th width="70">ID</th>
+                <th>Title</th>
+                <th>Lead</th>
+                <th>Customer</th>
+                <th>Value</th>
+                <th>Stage</th>
+                <th>Closed At</th>
+                <th width="150">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of filteredDeals">
+                <td>{{ d.id }}</td>
+                <td>{{ d.title }}</td>
+                <td>{{ d.lead_title }}</td>
+                <td>{{ d.customer_name }}</td>
+                <td>{{ d.value | number }}</td>
+                <td>
+                  <span class="badge bg-secondary text-white p-2">{{ d.stage }}</span>
+                </td>
+                <td>{{ d.closed_at ? (d.closed_at | date:'dd MMM yyyy') : '-' }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm" data-action="edit" [attr.data-id]="d.id">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  &nbsp;
+                  <button *ngIf="isAdmin" class="btn btn-danger btn-sm" data-action="delete" [attr.data-id]="d.id">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="view !== 'create'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Tambah Deal</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Form Tambah Deal</h6>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="createForm" (ngSubmit)="submitCreate()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Title</label>
+              <input type="text" class="form-control" formControlName="title" placeholder="Judul deal">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Lead</label>
+              <select class="form-control form-select" formControlName="lead_id">
+                <option [ngValue]="null" disabled selected>-- Pilih Lead --</option>
+                <option *ngFor="let l of leads" [ngValue]="l.id">
+                  {{ l.title }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Value</label>
+              <input type="number" class="form-control" formControlName="value" placeholder="0">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Stage</label>
+              <select class="form-control form-select" formControlName="stage">
+                <option value="Open">Open</option>
+                <option value="Proposal">Proposal</option>
+                <option value="Negotiation">Negotiation</option>
+                <option value="Won">Won</option>
+                <option value="Lost">Lost</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label font-weight-bold text-gray-800 d-block">Closed At</label>
+              <input type="date" class="form-control" formControlName="closed_at">
+            </div>
+          </div>
+
+          <button class="btn btn-primary" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Menyimpan...' : 'Simpan Deal' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [hidden]="view !== 'edit'">
+  <div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Edit Deal</h1>
+
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-warning">Form Edit Deal</h6>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="editForm" (ngSubmit)="submitUpdate()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Title</label>
+              <input type="text" class="form-control" formControlName="title">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Lead</label>
+              <select class="form-select" formControlName="lead_id">
+                <option [ngValue]="null" disabled>-- Pilih Lead --</option>
+                <option *ngFor="let l of leads" [ngValue]="l.id">
+                  {{ l.title }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Value</label>
+              <input type="number" class="form-control" formControlName="value">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Stage</label>
+              <select class="form-select" formControlName="stage">
+                <option value="Open">Open</option>
+                <option value="Proposal">Proposal</option>
+                <option value="Negotiation">Negotiation</option>
+                <option value="Won">Won</option>
+                <option value="Lost">Lost</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Closed At</label>
+              <input type="date" class="form-control" formControlName="closed_at">
+            </div>
+          </div>
+
+          <button class="btn btn-warning" type="submit" [disabled]="isSaving">
+            <i class="fas fa-save"></i>
+            {{ isSaving ? 'Update...' : 'Update Deal' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="backToList()">
+            <i class="fas fa-arrow-left"></i> Kembali
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+.status-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.status-filter-btn {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.35rem;
+  background: #ffffff;
+  color: #334155;
+  font-weight: 700;
+}
+
+.status-filter-active {
+  border-color: #172554 !important;
+  background: #172554 !important;
+  color: #ffffff !important;
+}
+
+.status-filter-new {
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
+.status-filter-contacted {
+  border-color: #818cf8;
+  color: #4f46e5;
+}
+
+.status-filter-qualified {
+  border-color: #facc15;
+  color: #a16207;
+}
+
+.status-filter-won {
+  border-color: #86efac;
+  color: #15803d;
+}
+
+.status-filter-lost {
+  border-color: #fca5a5;
+  color: #dc2626;
+}
